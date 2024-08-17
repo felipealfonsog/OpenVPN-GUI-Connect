@@ -65,11 +65,11 @@ To run this application, you need to have Python 3 installed on your system, alo
 
 Dependencies:
 
-Python 3
-PyQt5
-OpenVPN
-curl
-pkexec (part of the polkit package)
+- Python 3
+- PyQt5
+- OpenVPN
+- curl
+- pkexec (part of the polkit package)
 
 #
 
