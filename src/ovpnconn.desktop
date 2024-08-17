@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=0.0.1
+Type=Application
+Name=OpenVPN GUI Connect
+Comment=Streamlined graphical interface for connecting to VPNs using OpenVPN.
+Exec=ovpnconn
+Icon=ovpnconn
+Terminal=false
+Categories=Utility;Network;
