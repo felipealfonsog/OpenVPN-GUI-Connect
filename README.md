@@ -1,12 +1,12 @@
-# OpenVPN-GUI-Connect (ovpnconn)*
+### OpenVPN-GUI-Connect (ovpnconn)*
 Streamlined graphical interface for connecting to VPNs using OpenVPN, with file selection and credential entry features.
 
 This Python application provides a user-friendly graphical interface (GUI) to manage OpenVPN connections on a Linux system. The application is built using PyQt5, a set of Python bindings for the Qt application framework, which allows for the creation of a modern and responsive user interface. The primary purpose of the application is to simplify the process of connecting to and disconnecting from VPNs, particularly for users who might find command-line tools cumbersome or complex.
 
 <sub>* This is currently an experimental phase where the primary focus is on making the system functional and establishing a practical and logical pathway that aligns with both my vision and the project's goals. It might contain errors, bugs, etc. Many other non-core elements of the project are considered secondary.</sub>
 
-![Version](https://img.shields.io/github/release/felipealfonsog/NovaNav.svg?style=flat&color=blue)
-![Main Language](https://img.shields.io/github/languages/top/felipealfonsog/NovaNav.svg?style=flat&color=blue)
+![Version](https://img.shields.io/github/release/felipealfonsog/OpenVPN-GUI-Connect.svg?style=flat&color=blue)
+![Main Language](https://img.shields.io/github/languages/top/felipealfonsog/OpenVPN-GUI-Connect.svg?style=flat&color=blue)
 [![Open Source? Yes!](https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github)](https://github.com/Naereen/badges/)
 
 
@@ -16,8 +16,10 @@ This Python application provides a user-friendly graphical interface (GUI) to ma
 [![GPL license](https://img.shields.io/badge/License-GPL-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 -->
 
-[![Vim](https://img.shields.io/badge/--019733?logo=vim)](https://www.vim.org/)
-[![Visual Studio Code](https://img.shields.io/badge/--007ACC?logo=visual%20studio%20code&logoColor=ffffff)](https://code.visualstudio.com/)
+[![Vim](https://img.shields.io/badge/Vim-Master%20Editor-019733?style=flat-square&logo=vim&logoColor=white)](https://www.vim.org/)
+[![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-Powerful%20IDE-007ACC?style=flat-square&logo=visual%20studio%20code&logoColor=white)](https://code.visualstudio.com/)
+
+
 
 # 
 
