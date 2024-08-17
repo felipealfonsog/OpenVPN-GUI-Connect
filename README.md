@@ -16,8 +16,9 @@ This Python application provides a user-friendly graphical interface (GUI) to ma
 [![GPL license](https://img.shields.io/badge/License-GPL-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 -->
 
-[![Vim](https://img.shields.io/badge/Vim-Master%20Editor-019733?style=for-the-badge&logo=vim&logoColor=white)](https://www.vim.org/)
-[![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-Powerful%20IDE-007ACC?style=for-the-badge&logo=visual%20studio%20code&logoColor=white)](https://code.visualstudio.com/)
+[![Vim](https://img.shields.io/badge/Vim-Master%20Editor-019733?style=flat-square&logo=vim&logoColor=white)](https://www.vim.org/)
+[![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-Powerful%20IDE-007ACC?style=flat-square&logo=visual%20studio%20code&logoColor=white)](https://code.visualstudio.com/)
+
 
 
 # 
