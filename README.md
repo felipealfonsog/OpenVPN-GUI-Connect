@@ -190,6 +190,24 @@ Thank you for joining me on this journey, and I hope it brings value to your lif
 #
 
 
+#### Uninstaller: 
+
+If you want to remove the app, just run the script:
+
+   ```
+   curl -O https://raw.githubusercontent.com/felipealfonsog/OpenVPN-GUI-Connect/main/uninstaller.sh
+   ```
+
+   ```
+   chmod +x uninstaller.sh
+   ./uninstaller.sh
+   ```
+
+<sub>* on macOS version might contain some errors, bugs, etc.</sub>
+
+#
+
+
 
 #### 🌟 Contact the Creator and Engineer Behind This Project
 
