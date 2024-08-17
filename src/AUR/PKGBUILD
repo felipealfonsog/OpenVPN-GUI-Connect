@@ -6,11 +6,11 @@ pkgdesc="OpenVPN-GUI-Connect (ovpnconn): Streamlined graphical interface for con
 arch=('x86_64')
 url="https://github.com/felipealfonsog/OpenVPN-GUI-Connect"
 license=('BSD-3-Clause')
-depends=('python' 'openvpn 'python-pyqt5' 'pkexec' 'curl')
+depends=('python' 'openvpn' 'python-pyqt5' 'pkexec' 'curl')
 
 source=("https://github.com/felipealfonsog/OpenVPN-GUI-Connect/archive/refs/tags/v.${pkgver}.tar.gz")
 
-sha256sums=('41ae0b3468fc23dfcc1f451cbe8bf6f3f9d6023550b12ad6c3b244c20a098647')
+sha256sums=('975e7d58c9991ebd04865c8da84ee4699e1c35eb8c67ce1ccde8afa2f28f1a96')
 
 prepare() {
   tar xf "v.${pkgver}.tar.gz" -C "$srcdir" --strip-components=1
