@@ -1,4 +1,4 @@
-# OpenVPN-GUI-Connect (ovpnconn)*
+#### OpenVPN-GUI-Connect (ovpnconn)*
 Streamlined graphical interface for connecting to VPNs using OpenVPN, with file selection and credential entry features.
 
 This Python application provides a user-friendly graphical interface (GUI) to manage OpenVPN connections on a Linux system. The application is built using PyQt5, a set of Python bindings for the Qt application framework, which allows for the creation of a modern and responsive user interface. The primary purpose of the application is to simplify the process of connecting to and disconnecting from VPNs, particularly for users who might find command-line tools cumbersome or complex.
