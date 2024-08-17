@@ -1,236 +1,109 @@
 #!/bin/bash
 
+set -e
+
+# Define variables
+PKG_NAME="ovpnconn"
+PKG_VER="0.0.1"
+REPO_URL="https://github.com/felipealfonsog/OpenVPN-GUI-Connect"
+ARCHIVE_URL="${REPO_URL}/archive/refs/tags/v.${PKG_VER}.tar.gz"
+SRC_DIR="${PKG_NAME}-${PKG_VER}"
+INSTALL_DIR="/usr/local/bin"
+ICON_DIR="/usr/share/pixmaps"
+DESKTOP_DIR="/usr/share/applications"
+
+# Welcome message function
 welcome() {
     echo "
-    ╔═══════════════════════════════════════╗
-    ║                                       ║
-    ║   ~ NovaNav Browser ~                 ║
-    ║   Developed with ❤️ by                 ║
-    ║   Felipe Alfonso González L.          ║
-    ║   Computer Science Engineer           ║
-    ║   Chile                               ║
-    ║                                       ║
-    ║   Contact: f.alfonso@res-ear.ch       ║
-    ║   Licensed under BSD 3-clause         ║
-    ║   GitHub: github.com/felipealfonsog   ║
-    ║                                       ║
-    ╚═══════════════════════════════════════╝
+    ╔═════════════════════════════════════════════════════════╗
+    ║                                                         ║
+    ║   ~ OpenVPN-GUI-Connect Installer ~                     ║
+    ║   Developed with ❤️ by Felipe Alfonso González L.       ║
+    ║   Computer Science Engineer                             ║
+    ║   Chile                                                 ║
+    ║                                                         ║
+    ║   Contact: f.alfonso@res-ear.ch                         ║
+    ║   Licensed under BSD 3-clause                           ║
+    ║   GitHub: github.com/felipealfonsog                     ║
+    ║                                                         ║
+    ╚═════════════════════════════════════════════════════════╝
     "
-    echo "Welcome to the NovaNav Browser (C++ version) - Bash installer!"
+    echo "Welcome to the OpenVPN-GUI-Connect Installer!"
     echo "---------------------------------------------------------------------"
 }
 
-check_execute_permission() {
-    if [[ ! -x "$0" ]]; then
-        echo "Error: The installer script does not have execute permission."
-        echo "Do you want to grant it?"
-        select yn in "Yes" "No"; do
-            case $yn in
-                Yes)
-                    chmod +x "$0"
-                    exec "$0" "$@"
-                    ;;
-                No)
-                    echo "Exiting program."
-                    exit 1
-                    ;;
-                *)
-                    echo "Invalid option. Please choose a valid option."
-                    ;;
-            esac
-        done
-    fi
-}
-
-check_homebrew_installation_macOS() {
-    if ! command -v brew &> /dev/null; then
-        echo "Homebrew is not installed on macOS. Do you want to install it?"
-        select yn in "Yes" "No"; do
-            case $yn in
-                Yes)
-                    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-                    if ! command -v brew &> /dev/null; then
-                        echo "Error: Homebrew installation failed."
-                        exit 1
-                    fi
-                    break
-                    ;;
-                No)
-                    echo "Exiting program."
-                    exit 1
-                    ;;
-                *)
-                    echo "Invalid option. Please choose a valid option."
-                    ;;
-            esac
-        done
-    fi
-}
-
-check_homebrew_installation_linux() {
-    if ! command -v brew &> /dev/null; then
-        echo "Homebrew/Linuxbrew is not installed on Linux. Do you want to install it?"
-        select yn in "Yes" "No"; do
-            case $yn in
-                Yes)
-                    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-                    if ! command -v brew &> /dev/null; then
-                        echo "Error: Homebrew/Linuxbrew installation failed."
-                        exit 1
-                    fi
-                    break
-                    ;;
-                No)
-                    echo "Exiting program."
-                    exit 1
-                    ;;
-                *)
-                    echo "Invalid option. Please choose a valid option."
-                    ;;
-            esac
-        done
-    fi
-}
-
-install_dependencies_linux() {
-    # Check if gcc, clang, qt5-base, and qt5-webengine are installed
-    local packages=("gcc" "clang" "qt5-base" "qt5-webengine")
-    local missing_packages=()
-    for pkg in "${packages[@]}"; do
-        if ! pacman -Qs "$pkg" &> /dev/null && ! dpkg -s "$pkg" &> /dev/null; then
-            missing_packages+=("$pkg")
-        fi
-    done
-
-    if [[ ${#missing_packages[@]} -gt 0 ]]; then
-        echo "The following packages are missing: ${missing_packages[*]}"
-        echo "Do you want to install them?"
-        select yn in "Yes, using Homebrew" "Yes, using package manager" "No"; do
-            case $yn in
-                "Yes, using Homebrew")
-                    brew install "${missing_packages[@]}"
-                    break
-                    ;;
-                "Yes, using package manager")
-                    if [[ -f /etc/arch-release ]]; then
-                        sudo pacman -S "${missing_packages[@]}"
-                    elif [[ -f /etc/debian_version ]]; then
-                        sudo apt-get update && sudo apt-get install "${missing_packages[@]}"
-                    else
-                        echo "Error: Unsupported Linux distribution. Please install the required packages manually."
-                        exit 1
-                    fi
-                    break
-                    ;;
-                "No")
-                    echo "Exiting program."
-                    exit 1
-                    ;;
-                *)
-                    echo "Invalid option. Please choose a valid option."
-                    ;;
-            esac
-        done
-    fi
-}
-
-download_compile_install() {
-    local pkgver="0.0.9"
-    local pkgname="novanav-cpp"
-    local url="https://github.com/felipealfonsog/NovaNav/archive/refs/tags/v.${pkgver}.tar.gz"
-    local filename="${pkgname}-${pkgver}.tar.gz"
-    local src_dir=""
-    local bin_dir="/usr/local/bin"
-    local icon_dir="/usr/share/pixmaps"
-    local desktop_dir="/usr/share/applications"
-
-    if [[ "$(uname)" == "Darwin" ]]; then
-        src_dir="src/cpp_macos"
+# Function to install dependencies
+install_dependencies() {
+  if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    if command -v pacman &> /dev/null; then
+      sudo pacman -Syu --needed python openvpn python-pyqt5 pkexec curl
+    elif command -v apt &> /dev/null; then
+      sudo apt update && sudo apt install -y python3 openvpn python3-pyqt5 pkexec curl
     else
-        src_dir="src/cpp"
+      echo "Unsupported Linux distribution."
+      exit 1
     fi
-
-    # Download source
-    wget -O "$filename" "$url"
-
-    # Extract source
-    tar xf "$filename"
-
-    # Enter source directory
-    cd "NovaNav-v.${pkgver}/${src_dir}"
-
-    # Prepare build
-    qmake PREFIX=/usr
-
-    # Build
-    make
-
-    # Install binary
-    sudo install -Dm755 novanav "$bin_dir/novanav"
-
-    # Install icon
-    sudo install -Dm644 "../nnav-iconlogo.png" "$icon_dir/novanav.png"
-
-    # Install .desktop file
-    sudo install -Dm644 "../novanav.desktop" "$desktop_dir/novanav.desktop"
-}
-
-configure_path() {
-    if [[ "$(uname)" == "Darwin" ]]; then
-        echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.bash_profile
-        source ~/.bash_profile
+  elif [[ "$OSTYPE" == "darwin"* ]]; then
+    if command -v brew &> /dev/null; then
+      brew install python openvpn pyqt5 curl
     else
-        if [[ -f ~/.bashrc ]]; then
-            echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.bashrc
-            source ~/.bashrc
-        elif [[ -f ~/.bash_profile ]]; then
-            echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.bash_profile
-            source ~/.bash_profile
-        else
-            echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.profile
-            source ~/.profile
-        fi
+      echo "Homebrew is required on macOS. Please install it first."
+      exit 1
     fi
+  else
+    echo "Unsupported OS."
+    exit 1
+  fi
 }
 
-reload_shell() {
-    if [[ "$(uname)" == "Darwin" ]]; then
-        source ~/.bash_profile
-    elif [[ "$(uname)" == "Linux" ]]; then
-        if [[ -f /etc/arch-release || -f /etc/debian_version ]]; then
-            source ~/.bashrc
-        else
-            source ~/.bashrc
-        fi
-    fi
+# Function to download and extract the source code
+download_source() {
+  curl -L "${ARCHIVE_URL}" -o "v.${PKG_VER}.tar.gz"
+  tar xf "v.${PKG_VER}.tar.gz"
 }
 
+# Function to install the package
+install_package() {
+  # Install the Python script
+  sudo install -Dm755 "${SRC_DIR}/src/main.py" "${INSTALL_DIR}/ovpnconn.py"
+
+  # Create a shell script to execute ovpnconn.py
+  echo '#!/bin/bash' | sudo tee "${INSTALL_DIR}/ovpnconn" > /dev/null
+  echo "python3 ${INSTALL_DIR}/ovpnconn.py \"\$@\"" | sudo tee -a "${INSTALL_DIR}/ovpnconn" > /dev/null
+  sudo chmod +x "${INSTALL_DIR}/ovpnconn"
+
+  # Install the icon
+  sudo install -Dm644 -p "${SRC_DIR}/src/ovpnconn-iconlogo.png" "${ICON_DIR}/ovpnconn.png"
+
+  # Install the .desktop file (Linux only)
+  if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    sudo install -Dm644 -p "${SRC_DIR}/src/ovpnconn.desktop" "${DESKTOP_DIR}/ovpnconn.desktop"
+  fi
+}
+
+# Function to clean up
 cleanup() {
-    # Clean up
-    cd ../..
-    rm -rf "NovaNav-v.${pkgver}" "$filename"
+  rm -rf "${SRC_DIR}" "v.${PKG_VER}.tar.gz"
 }
 
-main() {
-    welcome
-    check_execute_permission
+# Execute functions
+welcome
+install_dependencies
+download_source
+install_package
+cleanup
 
-    if [[ "$(uname)" == "Darwin" ]]; then
-        check_homebrew_installation_macOS
-    elif [[ "$(uname)" == "Linux" ]]; then
-        check_homebrew_installation_linux
-        install_dependencies_linux
-    fi
-
-    download_compile_install
-    configure_path
-    reload_shell
-    cleanup
-
-    echo "--------------------------------------------------------------------------------"
-    echo "You can now run the program by typing 'novanav' in the terminal on macOS."
-    echo "If you're using Arch Linux, Debian or any other distro, you can find NovaNav Browser in your program menu."
-    echo "--------------------------------------------------------------------------------"
-}
-
-main
+# Final message
+echo "
+╔═════════════════════════════════════════════════════════╗
+║                                                         ║
+║   ~ Installation Complete ~                             ║
+║   OpenVPN-GUI-Connect v${PKG_VER} has been successfully  ║
+║   installed on your system!                             ║
+║                                                         ║
+║   You can now launch the application by typing:         ║
+║   'ovpnconn' in your terminal.                          ║
+║                                                         ║
+║   Thank you for using OpenVPN-GUI-Connect!              ║
+╚═════════════════════════════════════════════════════════╝
+"
